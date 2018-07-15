@@ -11,9 +11,10 @@
 import json
 import urllib
 
+
 class GraphQL:
     def __init__(self, url, jwt_token):
-        """ graphql_request
+        """ __init__
 
             @param url      : GraphQL Endpoint URL
             @param jwt_token: jwt token

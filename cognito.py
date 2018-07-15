@@ -9,7 +9,9 @@
 """
 import base64
 import json
+
 import boto3
+
 
 def cognito_auth(username, password, region_name, client_id):
     """ cognito_auth
@@ -39,7 +41,7 @@ def cognito_auth(username, password, region_name, client_id):
 
 
 def formatAuth(client):
-    """ cognito_auth
+    """ formatAuth
 
         @param client: boto3.client
 

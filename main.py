@@ -11,13 +11,18 @@
     used font: http://patorjk.com/software/taag/#p=display&f=Calvin%20S&t=Type%20Something%20
 """
 
-import sys, os
-import cognito
-from os.path import join, dirname
-from dotenv import load_dotenv
+import os
+import sys
 from getpass import getpass
+from os.path import dirname, join
+from test import Test
+
+from dotenv import load_dotenv
 from graphql import GraphQL
-from test_list import get_test_list
+
+import cognito
+from bcolors import bcolors
+
 
 def main():
     """ main
@@ -73,8 +78,11 @@ APPSYNC_URL        : {bcolors.OKGREEN}{APPSYNC_URL}{bcolors.ENDC}
 {bcolors.OKBLUE}i {bcolors.ENDC}email              : {bcolors.OKGREEN}{user["payload"]["email"]}{bcolors.ENDC}
 {bcolors.OKBLUE}i {bcolors.ENDC}custom:display_name: {bcolors.OKGREEN}{user["payload"]["custom:display_name"]}{bcolors.ENDC}
         """)
-    
-    test_list = get_test_list(user["payload"]["sub"])
+
+    jwt = auth["AuthenticationResult"]["IdToken"]
+    graphql_client = GraphQL(APPSYNC_URL, jwt)
+    test = Test(user["payload"]["sub"], graphql_client)
+    test_list = test.get_test_list()
 
     print(f"""
 =======================================================
@@ -85,53 +93,24 @@ Number of test items: {bcolors.OKGREEN}{len(test_list)}{bcolors.ENDC}
 =======================================================
     """)
 
-    jwt = auth["AuthenticationResult"]["IdToken"]
-    graphql = GraphQL(APPSYNC_URL, jwt)
-
-    errors = []
-    for test_index, test in enumerate(test_list):
-        print(f"[{test_index + 1}/{len(test_list)}] {bcolors.UNDERLINE}{test['name']}{bcolors.ENDC}")
-        queryErrors = []
-        for query in test["queries"]:
-            print(f"{bcolors.OKBLUE}i {bcolors.ENDC}{bcolors.INFO}{query['name']}{bcolors.ENDC}: ", end="")
-            result = graphql.graphql_request(query["query"], query["variables"], operation_name=query["operation_name"])
-            if not 'errors' in result["body"].keys() or result['status'] != 200:
-                print(f"{bcolors.OKGREEN}{result['status']} {result['body']}{bcolors.ENDC}")
-            else:
-                print(f"{bcolors.FAIL}{result['status']} {result['body']}{bcolors.ENDC}")
-                queryErrors.append(result['body'])
-        
-        if len(queryErrors) != 0:
-            errors.append(queryErrors)
-
-    
+    errors = test.execute_test()
+            
     print(f"""
 =======================================================
 ╔╦╗┌─┐┌─┐┌┬┐  ╦═╗┌─┐┌─┐┬ ┬┬ ┌┬┐
  ║ ├┤ └─┐ │   ╠╦╝├┤ └─┐│ ││  │ 
  ╩ └─┘└─┘ ┴   ╩╚═└─┘└─┘└─┘┴─┘┴ 
- 
+
 Number of test items: {bcolors.OKGREEN}{len(test_list)}{bcolors.ENDC}
-Success count       : {bcolors.OKGREEN}{len(errors) - len(test_list)}{bcolors.ENDC}
+Success count       : {bcolors.OKGREEN}{len(test_list) - len(errors)}{bcolors.ENDC}
 Faild count         : {bcolors.OKGREEN}{len(errors)}{bcolors.ENDC}
 =======================================================
     """)
 
-    if (len(test_list) == 0):
-        sys.exit(0)
-    else:
+    if (len(errors)):
         sys.exit(1)
-
-class bcolors:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    WARNING = '\033[93m'
-    OKGREEN = '\033[92m'
-    INFO = '\033[90m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
+    
+    sys.exit(0)
 
 if __name__ == "__main__":
     main()
