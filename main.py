@@ -109,7 +109,7 @@ def main():
             for index, error in enumerate(errors):
                 f.write(f"Error {index + 1}: \n")
                 for i, e in enumerate(error):
-                    f.write(f"{i + 1}. {str(error)}\n")
+                    f.write(f"{i + 1}. {str(e)}\n")
         sys.exit(1)
 
     sys.exit(0)

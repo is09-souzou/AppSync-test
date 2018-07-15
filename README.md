@@ -83,13 +83,15 @@ sample
             - createUser
         """
     
+        progress_count = 0
         errors = []
 
         # 1. Reset
-        self._reset(errors)
+        progress_count += 1
+        self._reset(errors, progress_count)
 
         # 2. createUser: Confirmation equal to createUser request data
-        self._print_process_forward("Mutation(createUser)")
+        self._print_process_forward("Mutation(createUser)", progress_count)
         user_input = {
             "displayName": f"AppSync-test sample user {str(datetime.now())}",
             "email"      : "AppSync-test@sample.xyz",
@@ -150,6 +152,7 @@ sample
     def get_test_list(self):
         return [
             ...
+            # Add
             {
                 "name": "Sample Test",
                 "exec": lambda: self.test_sample()
