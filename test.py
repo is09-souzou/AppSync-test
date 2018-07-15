@@ -26,6 +26,10 @@ class Test:
                 "name": "Work test",
                 "exec": lambda: self.test_work()
             },
+            # {
+            #     "name": "Work list test",
+            #     "exec": lambda: self.test_work_list()
+            # }
         ]
 
     def __init__(self, user_id, client):
@@ -781,6 +785,121 @@ class Test:
         else:
             self._print_process_backward(result["body"], False)
             errors.append(Exception(result["body"]))
+
+        if len(errors) == 0:
+            return None
+        else:
+            return errors
+
+    # TODO: creating...
+    def test_work_list(self):
+        """ test_work
+
+            Flow
+            1. Reset
+            2. createUser: No verification
+            3. createWork: Confirmation equal to createWork request data
+
+            Use Queries
+            - createUser
+            - createWork
+        """
+
+        process_count = 0
+        errors = []
+
+        # 1. Reset
+        process_count += 1
+        self._reset(errors, process_count)
+
+        # 2. createUser: No verification
+        process_count += 1
+        self._print_process_forward("Mutation(createUser)", process_count)
+        result = self.client.graphql_request(
+            """
+                mutation createUser(
+                    $user: UserCreate!
+                ) {
+                    createUser(
+                        user: $user
+                    ) {
+                        id
+                    }
+                }
+            """,
+            {
+                "user": {
+                    "displayName": f"AppSync-test test user {str(datetime.now())}",
+                    "email"      : "AppSync-test@sample.xyz",
+                    "career"     : "AppSync-test test_user test",
+                    "avatarUri"  : "https://s3-ap-northeast-1.amazonaws.com/is09-portal-image/system/broken-image.png",
+                    "message"    : "",
+                }
+            },
+        )
+
+        if "errors" not in result["body"].keys():
+            try:
+                self._print_process_backward(f"Create user {result['body']['data']['createUser']['id']}", True)
+            except Exception as e:
+                self._print_process_backward(e, False)
+                errors.append(Exception(result["body"]))
+        else:
+            self._print_process_backward(result["body"], False)
+            errors.append(Exception(result["body"]))
+
+        # 3. createWork: Confirmation equal to createWork request data
+        for i in range(25):
+            process_count += 1
+            work_input = {
+                "userId"     : self.user_id,
+                "title"      : f"AppSync-test Work {i + 1 % 2}",
+                "description": f"AppSync-test work {str(datetime.now())}",
+                "tags"       : ["test", "even" if (i + 1) % 2 == 0 else "odd"],
+                "imageUris"  : ["https://s3-ap-northeast-1.amazonaws.com/is09-portal-image/system/broken-image.png"]
+            }
+            self._print_process_forward("Mutation(createWork)", process_count)
+            result = self.client.graphql_request(
+                """
+                    mutation createWork(
+                        $work: WorkCreate!
+                    ) {
+                        createWork(
+                            work: $work
+                        ) {
+                            id
+                            description
+                            userId
+                            title
+                            tags
+                            imageUris
+                            createdAt
+                        }
+                    }
+                """,
+                {
+                    "work": work_input
+                },
+            )
+
+            if "errors" not in result["body"].keys():
+                try:
+                    request_work_input = copy.copy(work_input)
+                    created_work_id = result['body']['data']['createWork']['id']
+                    request_work_input["id"] = created_work_id
+                    created_work_createdAt = result['body']['data']['createWork']['createdAt']
+                    request_work_input["createdAt"] = created_work_createdAt
+                    if request_work_input == result['body']['data']['createWork']:
+                        self._print_process_backward(f"Create work {result['body']['data']['createWork']['id']}", True)
+                    else:
+                        self._print_process_backward("Not assumed response value", False)
+                        errors.append(Exception(result["body"]))
+                except Exception as e:
+                    self._print_process_backward(e, False)
+                    errors.append(Exception(result["body"]))
+            else:
+                self._print_process_backward(result["body"], False)
+                errors.append(Exception(result["body"]))
 
         if len(errors) == 0:
             return None
