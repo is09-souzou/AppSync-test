@@ -22,6 +22,8 @@ from graphql import GraphQL
 import cognito
 from bcolors import bcolors
 
+ERROR_LOGS_FILE = "portal-error.log"
+
 
 def main():
     """ main
@@ -106,7 +108,9 @@ Faild count         : {bcolors.OKGREEN}{len(errors)}{bcolors.ENDC}
 =======================================================
     """)
 
-    if (len(errors)):
+    if (len(errors) != 0):
+        with open(join(dirname(__file__), ERROR_LOGS_FILE), mode="w") as f:
+            f.write(str(errors))
         sys.exit(1)
 
     sys.exit(0)
