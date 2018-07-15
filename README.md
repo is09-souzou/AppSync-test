@@ -44,6 +44,7 @@ $ source virtualenv/bin/activate
 $ pip install -U pylint
 $ pip install boto3
 $ pip install python-dotenv
+$ pip install flake8
 ```
 
 ## Run Apprication
@@ -56,6 +57,11 @@ $ python3 main.py
 - Exit virtualenv
 ```bash
 $ deactivate
+```
+
+## Check lint
+```bash
+$ flake8 *.py
 ```
 
 ## Add test

@@ -9,7 +9,6 @@
 """
 
 from datetime import datetime
-from inspect import signature
 
 from bcolors import bcolors
 
@@ -48,7 +47,7 @@ class Test:
         for test_index, test in enumerate(test_list):
             print(f"[{test_index + 1}/{len(test_list)}] Try: {bcolors.UNDERLINE}{test['name']}{bcolors.ENDC}")
             error = test["exec"]()
-            if (error != None):
+            if (error is not None):
                 errors.append(error)
 
         return errors
@@ -78,16 +77,16 @@ class Test:
                 "id": self.user_id
             },
         )
-        if not 'errors' in result["body"].keys() or result['status'] != 200:
+        if "errors" not in result["body"].keys() or result["status"] != 200:
             try:
                 self._print_process_backward(f"Delete own user data {result['body']['data']['deleteUser']['id']}", True)
             except Exception as e:
                 self._print_process_backward(e, False)
                 errors.append(e)
         else:
-            self._print_process_backward(result['body'], False)
-            errors.append(result['body'])
-        
+            self._print_process_backward(result["body"], False)
+            errors.append(result["body"])
+
         # 2. createUser
         self._print_process_forward("Mutation(createUser)")
         result = self.client.graphql_request(
@@ -112,15 +111,15 @@ class Test:
                 }
             },
         )
-        if not 'errors' in result["body"].keys() or result['status'] != 200:
+        if "errors" not in result["body"].keys() or result["status"] != 200:
             try:
                 self._print_process_backward(f"Create user {result['body']['data']['createUser']['id']}", True)
             except Exception as e:
                 self._print_process_backward(e, False)
                 errors.append(e)
         else:
-            self._print_process_backward(result['body'], False)
-            errors.append(result['body'])
+            self._print_process_backward(result["body"], False)
+            errors.append(result["body"])
 
         # 3. getUser
         self._print_process_forward("Query(getUser)")
@@ -141,16 +140,15 @@ class Test:
                 "id": self.user_id
             },
         )
-        if not 'errors' in result["body"].keys() or result['status'] != 200:
+        if "errors" not in result["body"].keys() or result["status"] != 200:
             try:
                 self._print_process_backward(f"Get user {result['body']['data']['getUser']['id']}", True)
             except Exception as e:
                 self._print_process_backward(e, False)
                 errors.append(e)
         else:
-            self._print_process_backward(result['body'], False)
-            errors.append(result['body'])
-
+            self._print_process_backward(result["body"], False)
+            errors.append(result["body"])
 
         # 4 deleteUser
         self._print_process_forward("Reset(deleteUser)")
@@ -166,15 +164,15 @@ class Test:
                 "id": self.user_id
             },
         )
-        if not 'errors' in result["body"].keys() or result['status'] != 200:
+        if "errors" not in result["body"].keys() or result["status"] != 200:
             try:
                 self._print_process_backward(f"Delete own user data {result['body']['data']['deleteUser']['id']}", True)
             except Exception as e:
                 self._print_process_backward(e, False)
                 errors.append(e)
         else:
-            self._print_process_backward(result['body'], False)
-            errors.append(result['body'])
+            self._print_process_backward(result["body"], False)
+            errors.append(result["body"])
 
         # Finaly
         if len(errors) == 0:
@@ -218,16 +216,16 @@ class Test:
             },
         )
 
-        if not 'errors' in result["body"].keys() or result['status'] != 200:
+        if "errors" not in result["body"].keys() or result["status"] != 200:
             try:
                 self._print_process_backward(f"Create user {result['body']['data']['createUser']['id']}", True)
             except Exception as e:
                 self._print_process_backward(e, False)
                 errors.append(e)
         else:
-            self._print_process_backward(result['body'], False)
-            errors.append(result['body'])
-        
+            self._print_process_backward(result["body"], False)
+            errors.append(result["body"])
+
         # 2. createWork
         self._print_process_forward("Mutation(createWork)")
         result = self.client.graphql_request(
@@ -257,16 +255,15 @@ class Test:
             },
         )
 
-        if not 'errors' in result["body"].keys() or result['status'] != 200:
+        if "errors" not in result["body"].keys() or result["status"] != 200:
             try:
                 self._print_process_backward(f"Create work {result['body']['data']['createWork']['id']}", True)
             except Exception as e:
                 self._print_process_backward(e, False)
                 errors.append(e)
         else:
-            self._print_process_backward(result['body'], False)
-            errors.append(result['body'])
-
+            self._print_process_backward(result["body"], False)
+            errors.append(result["body"])
 
         # 3. getUser
         self._print_process_forward("Query(getUser)")
@@ -295,15 +292,15 @@ class Test:
                 "id": self.user_id
             },
         )
-        if not 'errors' in result["body"].keys() or result['status'] != 200:
+        if "errors" not in result["body"].keys() or result["status"] != 200:
             try:
-                self._print_process_backward(f"Get works by getUser Query {result['body']['data']['getUser']['works']}", True)
+                self._print_process_backward(f"Get works by getUser Query {result['body']['data']['getUser']['works']['items'][0]['id']}", True)
             except Exception as e:
                 self._print_process_backward(e, False)
                 errors.append(e)
         else:
-            self._print_process_backward(result['body'], False)
-            errors.append(result['body'])
+            self._print_process_backward(result["body"], False)
+            errors.append(result["body"])
 
         # 4 deleteUser
         self._print_process_forward("Reset(deleteUser)")
@@ -319,22 +316,21 @@ class Test:
                 "id": self.user_id
             },
         )
-        if not 'errors' in result["body"].keys() or result['status'] != 200:
+        if "errors" not in result["body"].keys() or result["status"] != 200:
             try:
                 self._print_process_backward(f"Delete own user data {result['body']['data']['deleteUser']['id']}", True)
             except Exception as e:
                 self._print_process_backward(e, False)
                 errors.append(e)
         else:
-            self._print_process_backward(result['body'], False)
-            errors.append(result['body'])
+            self._print_process_backward(result["body"], False)
+            errors.append(result["body"])
 
         # Finaly
         if len(errors) == 0:
             return None
         else:
             return errors
-
 
     @staticmethod
     def _print_process_forward(title):
@@ -346,4 +342,3 @@ class Test:
             print(f"{bcolors.OKGREEN}{bcolors.BOLD}✓{bcolors.ENDC} {value}")
         else:
             print(f"{bcolors.FAIL}{bcolors.BOLD}✗ {value}{bcolors.ENDC}")
-

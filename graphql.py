@@ -4,7 +4,6 @@
     graphql.py
 
     GraphQL client Class
-    
     support version: Python 3.6.5
 """
 
@@ -19,7 +18,7 @@ class GraphQL:
             @param url      : GraphQL Endpoint URL
             @param jwt_token: jwt token
         """
-        self.url = url
+        self.url       = url
         self.jwt_token = jwt_token
 
     def graphql_request(self, query, variables, operation_name=None):
@@ -41,11 +40,16 @@ class GraphQL:
             "Authorization": self.jwt_token
         }
 
-        request = urllib.request.Request(self.url, data=json_data, headers=headers, method="POST")
+        request = urllib.request.Request(
+            self.url,
+            data=json_data,
+            headers=headers,
+            method="POST"
+        )
         with urllib.request.urlopen(request) as response:
             response_body = response.read().decode("utf-8")
             result = json.loads(response_body.split('\n')[0])
             return {
                 "status": response.status,
-                "body": result
+                "body"  : result
             }

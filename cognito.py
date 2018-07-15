@@ -4,7 +4,6 @@
     cognito.py
 
     AWS Cognito client
-    
     support version: Python 3.6.5
 """
 import base64
@@ -70,5 +69,9 @@ def formatAuth(client):
     jwt = client["AuthenticationResult"]["IdToken"].split('.')
     return {
         "header" : json.loads(base64.b64decode(jwt[0]).decode()),
-        "payload": json.loads(base64.urlsafe_b64decode(jwt[1] + '=' * (-len(jwt[1]) % 4)).decode())
+        "payload": json.loads(
+            base64.urlsafe_b64decode(
+                jwt[1] + '=' * (-len(jwt[1]) % 4)
+            ).decode()
+        )
     }

@@ -2,12 +2,11 @@
 
 """
     main.py
-    
+
     support version: Python 3.6.5
-    dependencies: 
+    dependencies:
         boto3
         python-dotenv
-    
     used font: http://patorjk.com/software/taag/#p=display&f=Calvin%20S&t=Type%20Something%20
 """
 
@@ -40,18 +39,18 @@ def main():
     print(f"""
 =======================================================
 ╔═╗┌─┐┬─┐┌┬┐┌─┐┬    ╔═╗┌─┐┌─┐╔═╗┬ ┬┌┐┌┌─┐  ╔╦╗┌─┐┌─┐┌┬┐
-╠═╝│ │├┬┘ │ ├─┤│    ╠═╣├─┘├─┘╚═╗└┬┘││││     ║ ├┤ └─┐ │ 
-╩  └─┘┴└─ ┴ ┴ ┴┴─┘  ╩ ╩┴  ┴  ╚═╝ ┴ ┘└┘└─┘   ╩ └─┘└─┘ ┴ 
+╠═╝│ │├┬┘ │ ├─┤│    ╠═╣├─┘├─┘╚═╗└┬┘││││     ║ ├┤ └─┐ │
+╩  └─┘┴└─ ┴ ┴ ┴┴─┘  ╩ ╩┴  ┴  ╚═╝ ┴ ┘└┘└─┘   ╩ └─┘└─┘ ┴
 COGNIT_RREGION_NAME: {bcolors.OKGREEN}{COGNIT_RREGION_NAME}{bcolors.ENDC}
 COGNIT_RREGION_NAME: {bcolors.OKGREEN}{COGNITO_CLIENT_KEY}{bcolors.ENDC}
 APPSYNC_URL        : {bcolors.OKGREEN}{APPSYNC_URL}{bcolors.ENDC}
 =======================================================
     """)
 
-    if USERNAME == None:
+    if USERNAME is None:
         USERNAME = input("Input cognito Username > ")
 
-    if PASSWORD == None:
+    if PASSWORD is None:
         PASSWORD = getpass("Input cognito Password > ")
 
     print(f"{bcolors.OKBLUE}Try{bcolors.ENDC} SignIn")
@@ -87,19 +86,19 @@ APPSYNC_URL        : {bcolors.OKGREEN}{APPSYNC_URL}{bcolors.ENDC}
     print(f"""
 =======================================================
 ╔═╗─┐ ┬┌─┐┌─┐┬ ┬┌┬┐┌─┐  ╔╦╗╔═╗╔═╗╔╦╗
-║╣ ┌┴┬┘├┤ │  │ │ │ ├┤    ║ ║╣ ╚═╗ ║ 
-╚═╝┴ └─└─┘└─┘└─┘ ┴ └─┘   ╩ ╚═╝╚═╝ ╩ 
+║╣ ┌┴┬┘├┤ │  │ │ │ ├┤    ║ ║╣ ╚═╗ ║
+╚═╝┴ └─└─┘└─┘└─┘ ┴ └─┘   ╩ ╚═╝╚═╝ ╩
 Number of test items: {bcolors.OKGREEN}{len(test_list)}{bcolors.ENDC}
 =======================================================
     """)
 
     errors = test.execute_test()
-            
+
     print(f"""
 =======================================================
 ╔╦╗┌─┐┌─┐┌┬┐  ╦═╗┌─┐┌─┐┬ ┬┬ ┌┬┐
- ║ ├┤ └─┐ │   ╠╦╝├┤ └─┐│ ││  │ 
- ╩ └─┘└─┘ ┴   ╩╚═└─┘└─┘└─┘┴─┘┴ 
+ ║ ├┤ └─┐ │   ╠╦╝├┤ └─┐│ ││  │
+ ╩ └─┘└─┘ ┴   ╩╚═└─┘└─┘└─┘┴─┘┴
 
 Number of test items: {bcolors.OKGREEN}{len(test_list)}{bcolors.ENDC}
 Success count       : {bcolors.OKGREEN}{len(test_list) - len(errors)}{bcolors.ENDC}
@@ -109,8 +108,9 @@ Faild count         : {bcolors.OKGREEN}{len(errors)}{bcolors.ENDC}
 
     if (len(errors)):
         sys.exit(1)
-    
+
     sys.exit(0)
+
 
 if __name__ == "__main__":
     main()
