@@ -1,6 +1,5 @@
 # AppSync-test
-https://github.com/is09-souzou/AppSync-Resolver-Mapping-Lambda
-Test took
+[AppSync-Resolver-Mapping-Lambda](https://github.com/is09-souzou/AppSync-Resolver-Mapping-Lambda) Test tool
 
 ## Setup
 
@@ -11,7 +10,7 @@ COGNIT_RREGION_NAME=
 COGNITO_CLIENT_KEY=
 APPSYNC_URL=
 
-# option
+# Option
 USERNAME=
 PASSWORD=
 ```
