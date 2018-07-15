@@ -33,11 +33,13 @@ $ virtualenv -p python3 virtualenv
 ```
 
 3. Start virtualenv
+
 ```bash
 $ source virtualenv/bin/activate
 ```
 
 4. Install dependencies
+
 ```bash
 $ pip install -U pylint
 $ pip install boto3
@@ -46,7 +48,7 @@ $ pip install python-dotenv
 
 ## Run Apprication
 
-5. Run main.py
+Run main.py
 ```
 $ python3 main.py
 ```
