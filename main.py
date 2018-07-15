@@ -12,6 +12,7 @@
 
 import os
 import sys
+from datetime import datetime
 from getpass import getpass
 from os.path import dirname, join
 from test import Test
@@ -39,14 +40,12 @@ def main():
     PASSWORD            = os.environ.get("PASSWORD")
 
     print(f"""
-=======================================================
 ╔═╗┌─┐┬─┐┌┬┐┌─┐┬    ╔═╗┌─┐┌─┐╔═╗┬ ┬┌┐┌┌─┐  ╔╦╗┌─┐┌─┐┌┬┐
 ╠═╝│ │├┬┘ │ ├─┤│    ╠═╣├─┘├─┘╚═╗└┬┘││││     ║ ├┤ └─┐ │
 ╩  └─┘┴└─ ┴ ┴ ┴┴─┘  ╩ ╩┴  ┴  ╚═╝ ┴ ┘└┘└─┘   ╩ └─┘└─┘ ┴
-COGNIT_RREGION_NAME: {bcolors.OKGREEN}{COGNIT_RREGION_NAME}{bcolors.ENDC}
-COGNIT_RREGION_NAME: {bcolors.OKGREEN}{COGNITO_CLIENT_KEY}{bcolors.ENDC}
-APPSYNC_URL        : {bcolors.OKGREEN}{APPSYNC_URL}{bcolors.ENDC}
-=======================================================
+> COGNIT_RREGION_NAME: {bcolors.OKGREEN}{COGNIT_RREGION_NAME}{bcolors.ENDC}
+> COGNIT_RREGION_NAME: {bcolors.OKGREEN}{COGNITO_CLIENT_KEY}{bcolors.ENDC}
+> APPSYNC_URL        : {bcolors.OKGREEN}{APPSYNC_URL}{bcolors.ENDC}
     """)
 
     if USERNAME is None:
@@ -55,7 +54,7 @@ APPSYNC_URL        : {bcolors.OKGREEN}{APPSYNC_URL}{bcolors.ENDC}
     if PASSWORD is None:
         PASSWORD = getpass("Input cognito Password > ")
 
-    print(f"{bcolors.OKBLUE}Try{bcolors.ENDC} SignIn")
+    print(f"{bcolors.OKBLUE}Try{bcolors.ENDC} Sign in...")
 
     auth = cognito.cognito_auth(
         USERNAME,
@@ -66,14 +65,14 @@ APPSYNC_URL        : {bcolors.OKGREEN}{APPSYNC_URL}{bcolors.ENDC}
 
     if isinstance(auth, Exception):
         print(f"""
-{bcolors.FAIL}Failed{bcolors.ENDC} SignIn
+{bcolors.FAIL}Failed{bcolors.ENDC} Sign in
 {bcolors.FAIL}{auth}{bcolors.ENDC}
         """)
         sys.exit(1)
     else:
         user = cognito.formatAuth(auth)
-        print(f"""
-{bcolors.OKGREEN}Success{bcolors.ENDC} SignIn
+        print(f"""\
+{bcolors.OKGREEN}Success{bcolors.ENDC} Sign in
 {bcolors.OKBLUE}i {bcolors.ENDC}username           : {bcolors.OKGREEN}{USERNAME}{bcolors.ENDC}
 {bcolors.OKBLUE}i {bcolors.ENDC}sub                : {bcolors.OKGREEN}{user["payload"]["sub"]}{bcolors.ENDC}
 {bcolors.OKBLUE}i {bcolors.ENDC}email              : {bcolors.OKGREEN}{user["payload"]["email"]}{bcolors.ENDC}
@@ -86,31 +85,31 @@ APPSYNC_URL        : {bcolors.OKGREEN}{APPSYNC_URL}{bcolors.ENDC}
     test_list = test.get_test_list()
 
     print(f"""
-=======================================================
 ╔═╗─┐ ┬┌─┐┌─┐┬ ┬┌┬┐┌─┐  ╔╦╗╔═╗╔═╗╔╦╗
 ║╣ ┌┴┬┘├┤ │  │ │ │ ├┤    ║ ║╣ ╚═╗ ║
 ╚═╝┴ └─└─┘└─┘└─┘ ┴ └─┘   ╩ ╚═╝╚═╝ ╩
-Number of test items: {bcolors.OKGREEN}{len(test_list)}{bcolors.ENDC}
-=======================================================
+> Number of test items: {bcolors.OKGREEN}{len(test_list)}{bcolors.ENDC}
     """)
 
     errors = test.execute_test()
 
     print(f"""
-=======================================================
-╔╦╗┌─┐┌─┐┌┬┐  ╦═╗┌─┐┌─┐┬ ┬┬ ┌┬┐
- ║ ├┤ └─┐ │   ╠╦╝├┤ └─┐│ ││  │
- ╩ └─┘└─┘ ┴   ╩╚═└─┘└─┘└─┘┴─┘┴
+╦═╗┌─┐┌─┐┬ ┬┬ ┌┬┐
+╠╦╝├┤ └─┐│ ││  │
+╩╚═└─┘└─┘└─┘┴─┘┴
 
-Number of test items: {bcolors.OKGREEN}{len(test_list)}{bcolors.ENDC}
-Success count       : {bcolors.OKGREEN}{len(test_list) - len(errors)}{bcolors.ENDC}
-Faild count         : {bcolors.OKGREEN}{len(errors)}{bcolors.ENDC}
-=======================================================
+> Number of test items: {bcolors.OKGREEN}{len(test_list)}{bcolors.ENDC}
+> Success count       : {bcolors.OKGREEN}{len(test_list) - len(errors)}{bcolors.ENDC}
+> Faild count         : {bcolors.OKGREEN}{len(errors)}{bcolors.ENDC}
     """)
 
     if (len(errors) != 0):
         with open(join(dirname(__file__), ERROR_LOGS_FILE), mode="w") as f:
-            f.write(str(errors))
+            f.write(f"{str(datetime.now())}\n")
+            for index, error in enumerate(errors):
+                f.write(f"Error {index + 1}: \n")
+                for i, e in enumerate(error):
+                    f.write(f"{i + 1}. {str(error)}\n")
         sys.exit(1)
 
     sys.exit(0)
