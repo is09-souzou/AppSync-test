@@ -393,7 +393,7 @@ class Test:
             "title"      : "AppSync-test test user",
             "description": f"AppSync-test work {str(datetime.now())}",
             "tags"       : ["AppSync-test"],
-            "imageUris"  : ["https://s3-ap-northeast-1.amazonaws.com/is09-portal-image/system/broken-image.png"]
+            "imageUrl"   : "https://s3-ap-northeast-1.amazonaws.com/is09-portal-image/system/broken-image.png"
         }
         self._print_process_forward("Mutation(createWork)", process_count)
         result = self.client.graphql_request(
@@ -409,7 +409,7 @@ class Test:
                         userId
                         title
                         tags
-                        imageUris
+                        imageUrl
                         createdAt
                     }
                 }
@@ -458,7 +458,7 @@ class Test:
                                 userId
                                 title
                                 tags
-                                imageUris
+                                imageUrl
                                 createdAt
                             }
                             exclusiveStartKey
@@ -499,7 +499,7 @@ class Test:
                         userId
                         title
                         tags
-                        imageUris
+                        imageUrl
                         createdAt
                     }
                 }
@@ -533,10 +533,7 @@ class Test:
             "title"      : "AppSync-test test user (updated)",
             "description": f"AppSync-test work {str(datetime.now())} (updated)",
             "tags"       : ["AppSync-test", "AppSync-test-updated"],
-            "imageUris"  : [
-                "https://s3-ap-northeast-1.amazonaws.com/is09-portal-image/system/broken-image.png",
-                "https://s3-ap-northeast-1.amazonaws.com/is09-portal-image/system/broken-image.png?updated"
-            ]
+            "imageUrl"   : "https://s3-ap-northeast-1.amazonaws.com/is09-portal-image/system/broken-image.png"
         }
         self._print_process_forward("Mutation(updateWork)", process_count)
         result = self.client.graphql_request(
@@ -552,7 +549,7 @@ class Test:
                         userId
                         title
                         tags
-                        imageUris
+                        imageUrl
                         createdAt
                     }
                 }
@@ -598,7 +595,7 @@ class Test:
                                 userId
                                 title
                                 tags
-                                imageUris
+                                imageUrl
                                 createdAt
                             }
                             exclusiveStartKey
@@ -639,7 +636,7 @@ class Test:
                         userId
                         title
                         tags
-                        imageUris
+                        imageUrl
                         createdAt
                     }
                 }
@@ -680,7 +677,7 @@ class Test:
                                 userId
                                 title
                                 tags
-                                imageUris
+                                imageUrl
                                 createdAt
                             }
                         }
@@ -725,7 +722,7 @@ class Test:
                                 userId
                                 title
                                 tags
-                                imageUris
+                                imageUrl
                                 createdAt
                             }
                             exclusiveStartKey
@@ -763,7 +760,7 @@ class Test:
                         userId
                         title
                         tags
-                        imageUris
+                        imageUrl
                         createdAt
                     }
                 }
@@ -856,7 +853,7 @@ class Test:
                 "title"      : f"AppSync-test Work {i + 1 % 2}",
                 "description": f"AppSync-test work {str(datetime.now())}",
                 "tags"       : ["test", "even" if (i + 1) % 2 == 0 else "odd"],
-                "imageUris"  : ["https://s3-ap-northeast-1.amazonaws.com/is09-portal-image/system/broken-image.png"]
+                "imageUrl"   : "https://s3-ap-northeast-1.amazonaws.com/is09-portal-image/system/broken-image.png"
             }
             self._print_process_forward("Mutation(createWork)", process_count)
             result = self.client.graphql_request(
@@ -872,7 +869,7 @@ class Test:
                             userId
                             title
                             tags
-                            imageUris
+                            imageUrl
                             createdAt
                         }
                     }
